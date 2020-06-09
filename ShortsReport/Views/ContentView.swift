@@ -11,6 +11,18 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         Text("Hello, World!")
+            .onAppear(perform: fetchWeather)
+    }
+    
+    func fetchWeather() {
+        NetworkManager.shared.fetchData(from: API.url) { result in
+            switch result {
+            case .success(let data):
+                print(data)
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
     }
 }
 
