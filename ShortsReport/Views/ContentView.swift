@@ -9,10 +9,21 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @ObservedObject var locationManager = LocationManager()
+    
     var body: some View {
-        Text("Hello, World!")
-            .onAppear(perform: fetchWeather)
+        VStack {
+            Text("You are at: (\(locationManager.lastKnownLocation?.latitude ?? 0), \(locationManager.lastKnownLocation?.longitude ?? 0))")
+            Text("Hello, World!")
+                .onAppear {
+                    self.fetchWeather()
+                }
+        }
     }
+
+
+    
     
     func fetchWeather() {
         NetworkManager.shared.fetchData(from: API.url) { result in
