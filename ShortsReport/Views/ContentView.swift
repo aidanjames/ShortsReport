@@ -11,18 +11,29 @@ import SwiftUI
 struct ContentView: View {
     
     @ObservedObject var locationManager = LocationManager()
+    @ObservedObject var viewModel = ViewModel()
+    
+    var shortsDescription: String {
+        guard locationManager.lastKnownLocation != nil && viewModel.canWearShorts != nil else { return "?" }
+        return viewModel.canWearShorts! ? "YES" : "NO"
+    }
     
     var body: some View {
         VStack {
-            Text("You are at: (\(locationManager.lastKnownLocation?.latitude ?? 0), \(locationManager.lastKnownLocation?.longitude ?? 0))")
-            Text("Hello, World!")
-                .onAppear {
-                    self.fetchWeather()
+            
+            Text("Is today appropriate for wearing SHORTS?")
+            
+            locationManager.lastKnownLocation.map { _ in
+                Text(shortsDescription).font(.largeTitle)
+                    .onAppear {
+                        self.viewModel.toggleShortsWithDelay()
+                        self.fetchWeather()
                 }
+            }
         }
     }
-
-
+    
+    
     
     
     func fetchWeather() {

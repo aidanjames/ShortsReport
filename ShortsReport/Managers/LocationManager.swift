@@ -16,7 +16,12 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
     override init() {
         super.init()
         manager.delegate = self
-        start()
+        manager.desiredAccuracy = kCLLocationAccuracyKilometer
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.start()
+
+        }
     }
 
     func start() {
