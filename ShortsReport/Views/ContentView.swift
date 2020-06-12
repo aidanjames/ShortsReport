@@ -24,12 +24,30 @@ struct ContentView: View {
             Text("Is today appropriate for wearing SHORTS?")
             
             locationManager.lastKnownLocation.map { _ in
-                Text(shortsDescription).font(.largeTitle)
+                Text(shortsDescription).font(.largeTitle).bold().padding()
                     .onAppear {
                         self.viewModel.toggleShortsWithDelay()
                         self.fetchWeather()
                 }
+                
             }
+            
+            if viewModel.canWearShorts != nil {
+                if viewModel.canWearShorts! {
+                    Image("shorts\(Int.random(in: 1...7))")
+                        .resizable()
+                        .scaledToFit()
+                } else {
+                    Image("pants\(Int.random(in: 1...11))")
+                        .resizable()
+                        .scaledToFit()
+                }
+                Button("Change") {
+                    self.viewModel.toggleShortsWithDelay()
+                }
+            }
+            
+
         }
     }
     

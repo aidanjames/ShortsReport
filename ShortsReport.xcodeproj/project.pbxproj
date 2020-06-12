@@ -17,6 +17,7 @@
 		3D17725724901ACC00D749E6 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D17725624901ACC00D749E6 /* NetworkManager.swift */; };
 		3D53D441249172B400B8BB9B /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D53D440249172B400B8BB9B /* LocationManager.swift */; };
 		3DF5CE542492C1E200482039 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DF5CE532492C1E200482039 /* ViewModel.swift */; };
+		3DF5CE562493F26900482039 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = 3DF5CE552493F26900482039 /* loading.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		3D17725624901ACC00D749E6 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		3D53D440249172B400B8BB9B /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		3DF5CE532492C1E200482039 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		3DF5CE552493F26900482039 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,14 +66,15 @@
 		3D17723B249019FC00D749E6 /* ShortsReport */ = {
 			isa = PBXGroup;
 			children = (
-				3D17725324901A3100D749E6 /* Support */,
+				3D17725024901A1A00D749E6 /* Views */,
 				3D17725224901A2B00D749E6 /* Model */,
 				3D17725124901A2600D749E6 /* Managers */,
-				3D17725024901A1A00D749E6 /* Views */,
+				3D17725324901A3100D749E6 /* Support */,
 				3D17723C249019FC00D749E6 /* AppDelegate.swift */,
 				3D17723E249019FC00D749E6 /* SceneDelegate.swift */,
 				3D177242249019FE00D749E6 /* Assets.xcassets */,
 				3D177247249019FE00D749E6 /* LaunchScreen.storyboard */,
+				3DF5CE552493F26900482039 /* loading.json */,
 				3D17724A249019FE00D749E6 /* Info.plist */,
 				3D177244249019FE00D749E6 /* Preview Content */,
 			);
@@ -179,6 +182,7 @@
 			files = (
 				3D177249249019FE00D749E6 /* LaunchScreen.storyboard in Resources */,
 				3D177246249019FE00D749E6 /* Preview Assets.xcassets in Resources */,
+				3DF5CE562493F26900482039 /* loading.json in Resources */,
 				3D177243249019FE00D749E6 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
