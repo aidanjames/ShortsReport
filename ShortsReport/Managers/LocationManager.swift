@@ -30,6 +30,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
     }
 
     func start() {
+        lastKnownLocation = nil
         manager.requestWhenInUseAuthorization()
         manager.startUpdatingLocation()
     }

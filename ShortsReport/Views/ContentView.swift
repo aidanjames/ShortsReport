@@ -47,7 +47,11 @@ struct ContentView: View {
                 }
             }
             
-
+            Button("Update location") {
+                self.locationManager.start()
+            }
+        .padding()
+            Text("LAT: \(self.locationManager.lastKnownLocation?.latitude ?? 0) LONG: \(self.locationManager.lastKnownLocation?.longitude ?? 0)")
         }
     }
     
