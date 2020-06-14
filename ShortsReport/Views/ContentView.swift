@@ -12,6 +12,7 @@ struct ContentView: View {
     
     @ObservedObject var locationManager = LocationManager()
     @ObservedObject var viewModel = ViewModel()
+    @ObservedObject var currentWeather = CurrentWeather()
     
     var shortsDescription: String {
         guard locationManager.lastKnownLocation != nil && viewModel.canWearShorts != nil else { return "?" }
@@ -20,7 +21,14 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            
+            Button("Get Weather") {
+                if self.locationManager.lastKnownLocation != nil {
+                    self.currentWeather.fetchCurrentWeather(fromLocation: self.locationManager.lastKnownLocation!)
+                    print(self.currentWeather.currentWeather)
+                }
+            }
+            .padding()
+            Spacer()
             Text("Is today appropriate for wearing SHORTS?")
             
             locationManager.lastKnownLocation.map { _ in

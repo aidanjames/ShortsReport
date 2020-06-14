@@ -13,7 +13,7 @@ import Foundation
  
  https://api.openweathermap.org/data/2.5/onecall?lat=33.441792&lon=-94.037689&exclude=minutely&appid=012583e4f70d9bb3a88dccaba58090ca
  
- 
+ https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={your api key}
  */
 
 
