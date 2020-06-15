@@ -17,6 +17,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
             stop()
         }
     }
+    
 
     override init() {
         super.init()
@@ -28,6 +29,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
 
         }
     }
+
 
     func start() {
         lastKnownLocation = nil

@@ -12,19 +12,15 @@ struct ContentView: View {
     
     @ObservedObject var locationManager = LocationManager()
     @ObservedObject var viewModel = ViewModel()
-    @ObservedObject var currentWeather = CurrentWeather()
     
-    var shortsDescription: String {
-        guard locationManager.lastKnownLocation != nil && viewModel.canWearShorts != nil else { return "?" }
-        return viewModel.canWearShorts! ? "YES" : "NO"
-    }
+    var shortsDescription: String { viewModel.canWearShorts.rawValue }
     
     var body: some View {
         VStack {
             Button("Get Weather") {
                 if self.locationManager.lastKnownLocation != nil {
-                    self.currentWeather.fetchCurrentWeather(fromLocation: self.locationManager.lastKnownLocation!)
-                    print(self.currentWeather.currentWeather)
+                    self.viewModel.fetchCurrentWeather(fromLocation: self.locationManager.lastKnownLocation!)
+                    print(self.viewModel.currentWeather)
                 }
             }
             .padding()
@@ -34,48 +30,23 @@ struct ContentView: View {
             locationManager.lastKnownLocation.map { _ in
                 Text(shortsDescription).font(.largeTitle).bold().padding()
                     .onAppear {
-                        self.viewModel.toggleShortsWithDelay()
-                        self.fetchWeather()
+                        self.viewModel.fetchCurrentWeather(fromLocation: self.locationManager.lastKnownLocation!)
                 }
-                
             }
             
-            if viewModel.canWearShorts != nil {
-                if viewModel.canWearShorts! {
-                    Image("shorts\(Int.random(in: 1...7))")
-                        .resizable()
-                        .scaledToFit()
-                } else {
-                    Image("pants\(Int.random(in: 1...11))")
-                        .resizable()
-                        .scaledToFit()
-                }
-                Button("Change") {
-                    self.viewModel.toggleShortsWithDelay()
-                }
-            }
+            viewModel.shortsImage
+                .resizable()
+                .scaledToFit()
             
             Button("Update location") {
                 self.locationManager.start()
             }
-        .padding()
+            .padding()
             Text("LAT: \(self.locationManager.lastKnownLocation?.latitude ?? 0) LONG: \(self.locationManager.lastKnownLocation?.longitude ?? 0)")
         }
     }
     
     
-    
-    
-    func fetchWeather() {
-        NetworkManager.shared.fetchData(from: API.url) { result in
-            switch result {
-            case .success(let data):
-                print(data)
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
-    }
 }
 
 struct ContentView_Previews: PreviewProvider {

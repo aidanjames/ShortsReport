@@ -54,31 +54,6 @@ import Foundation
  
  */
 
-class CurrentWeather: ObservableObject {
-    @Published var currentWeather: WeatherInfo?
-    
-    func fetchCurrentWeather(fromLocation coordinates: CLLocationCoordinate2D) {
-        // formulate URL
-        let URL = "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&appid=\(API.key)"
-        NetworkManager.shared.fetchData(from: URL) { result in
-            switch result {
-            case .success(let data):
-                print(data)
-                // Decode data
-                let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-                do {
-                    self.currentWeather = try decoder.decode(WeatherInfo.self, from: data)
-                    print(self.currentWeather!)
-                } catch {
-                    print(error.localizedDescription)
-                }
-            case .failure(let error):
-                fatalError("We couldn't get the data: \(error.localizedDescription)")
-            }
-        }
-    }
-}
 
 struct WeatherInfo: Codable {
     
@@ -97,9 +72,30 @@ struct WeatherInfo: Codable {
         var feelsLike: Double
         var tempMin: Double
         var tempMax: Double
+        
+        private let kelvin = 273.15
+        var tempC: Double { temp - kelvin }
+        var feelsLikeC: Double { feelsLike - kelvin }
+        var tempMinC: Double { tempMin - kelvin }
+        var tempMaxC: Double { tempMax - kelvin }
+        
+        func kelvinToCelcius(k: Double) -> Double {
+            k - 273.15
+        }
     }
     
     struct Wind: Codable {
         var speed: Double
     }
+    
+    
+}
+
+
+enum MockData {
+    
+    static func previewData() -> WeatherInfo {
+        WeatherInfo(weather: [WeatherInfo.Weather(main: "Clear", description: "clear sky")], main: WeatherInfo.Main(temp: 281.52, feelsLike: 278.99, tempMin: 280.15, tempMax: 283.71), wind: WeatherInfo.Wind(speed: 0.47), name: "Shuzen")
+    }
+    
 }
