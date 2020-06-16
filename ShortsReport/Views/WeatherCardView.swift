@@ -13,12 +13,34 @@ struct WeatherCardView: View {
     var currentWeather: WeatherInfo?
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        HStack {
+            VStack(alignment: .leading) {
+                HStack {
+                    Image(systemName: "mappin.and.ellipse")
+                    Text("\(currentWeather?.name ?? "-")").fontWeight(.black)
+                }
+                HStack {
+                    Text("\(currentWeather?.main.tempCString ?? "-")°").font(.largeTitle).bold()
+                    Text("Feels like: \(currentWeather?.main.feelsLikeCString ?? "-")°").font(.caption)
+                        .foregroundColor(.secondary)
+                }
+            }
+            Spacer()
+            HStack {
+                VStack {
+                    Image("\(currentWeather?.firstWeatherUnwrapped.icon ?? "50d")")
+                }
+            }
+        }
+        .padding()
+        .background(Color(hex: "b1b493").opacity(0.5))
+        .cornerRadius(20)
     }
 }
 
 struct WeatherCardView_Previews: PreviewProvider {
     static var previews: some View {
         WeatherCardView(currentWeather: MockData.previewData())
+            .previewLayout(.sizeThatFits)
     }
 }

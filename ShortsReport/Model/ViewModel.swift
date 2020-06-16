@@ -14,7 +14,7 @@ class ViewModel: ObservableObject {
     
     @Published var currentWeather: WeatherInfo?
     
-    @Published var canWearShorts: ShortsReport = .analysing {
+    @Published var canWearShorts: ShortsStatus = .analysing {
         didSet {
             guard canWearShorts != .analysing else {
                 shortsImage = Image("question")
@@ -58,7 +58,7 @@ class ViewModel: ObservableObject {
     
     func complicatedAlgorithym() {
         guard currentWeather != nil else { return }
-        let feelsLike = currentWeather!.main.feelsLikeC
+        let feelsLike = currentWeather!.main.feelsLikeCDouble
         switch feelsLike {
         case ...5 :
             canWearShorts = .absolutelyNot
@@ -78,10 +78,12 @@ class ViewModel: ObservableObject {
     
 }
 
-enum ShortsReport: String {
+enum ShortsStatus: String {
     case analysing = "Analysing complicated data"
     case definitely = "Definitely!"
     case maybe = "Yes-ish"
     case onlyShortsProfessionals = "Only for shorts professionals"
     case absolutelyNot = "No fucking way"
 }
+
+

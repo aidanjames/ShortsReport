@@ -57,27 +57,32 @@ import Foundation
 
 struct WeatherInfo: Codable {
     
-    var weather: [Weather]
+    fileprivate var weather: [Weather]
     var main: Main
     var wind: Wind
     var name: String
     
+    var firstWeatherUnwrapped: Weather {
+        if let first = weather.first {
+            return first
+        }
+        return Weather(main: "Error", description: "Error", icon: "Error")
+    }
+    
     struct Weather: Codable {
         var main: String
         var description: String
+        var icon: String
     }
-    
+        
     struct Main: Codable {
-        var temp: Double
-        var feelsLike: Double
-        var tempMin: Double
-        var tempMax: Double
+        fileprivate var temp: Double
+        fileprivate var feelsLike: Double
         
         private let kelvin = 273.15
-        var tempC: Double { temp - kelvin }
-        var feelsLikeC: Double { feelsLike - kelvin }
-        var tempMinC: Double { tempMin - kelvin }
-        var tempMaxC: Double { tempMax - kelvin }
+        var tempCString: String { String(Int(temp - kelvin)) }
+        var feelsLikeCString: String { String(Int(feelsLike - kelvin)) }
+        var feelsLikeCDouble: Double { feelsLike - kelvin }
         
         func kelvinToCelcius(k: Double) -> Double {
             k - 273.15
@@ -95,7 +100,7 @@ struct WeatherInfo: Codable {
 enum MockData {
     
     static func previewData() -> WeatherInfo {
-        WeatherInfo(weather: [WeatherInfo.Weather(main: "Clear", description: "clear sky")], main: WeatherInfo.Main(temp: 281.52, feelsLike: 278.99, tempMin: 280.15, tempMax: 283.71), wind: WeatherInfo.Wind(speed: 0.47), name: "Shuzen")
+        WeatherInfo(weather: [WeatherInfo.Weather(main: "Clear", description: "clear sky", icon: "01d")], main: WeatherInfo.Main(temp: 281.52, feelsLike: 278.99), wind: WeatherInfo.Wind(speed: 0.47), name: "Shuzen")
     }
     
 }

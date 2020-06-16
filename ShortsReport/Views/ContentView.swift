@@ -17,15 +17,12 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            Button("Get Weather") {
-                if self.locationManager.lastKnownLocation != nil {
-                    self.viewModel.fetchCurrentWeather(fromLocation: self.locationManager.lastKnownLocation!)
-                    print(self.viewModel.currentWeather)
-                }
-            }
-            .padding()
-            Spacer()
-            Text("Is today appropriate for wearing SHORTS?")
+
+            
+            WeatherCardView(currentWeather: viewModel.currentWeather)
+                .padding()
+                .padding(.top, 50)
+            Text("Can I wear shorts right now?").padding()
             
             locationManager.lastKnownLocation.map { _ in
                 Text(shortsDescription).font(.largeTitle).bold().padding()
@@ -38,11 +35,19 @@ struct ContentView: View {
                 .resizable()
                 .scaledToFit()
             
-            Button("Update location") {
-                self.locationManager.start()
-            }
-            .padding()
-            Text("LAT: \(self.locationManager.lastKnownLocation?.latitude ?? 0) LONG: \(self.locationManager.lastKnownLocation?.longitude ?? 0)")
+            Spacer()
+            
+//            Button("Update location") {
+//                self.locationManager.start()
+//            }
+//            .padding()
+//
+//            Button("Get Weather") {
+//                if self.locationManager.lastKnownLocation != nil {
+//                    self.viewModel.fetchCurrentWeather(fromLocation: self.locationManager.lastKnownLocation!)
+//                }
+//            }
+//            .padding()
         }
     }
     
