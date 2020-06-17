@@ -18,19 +18,16 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
         }
     }
     
-
+    
     override init() {
         super.init()
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyKilometer
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.start()
-
-        }
+        self.start()
     }
-
-
+    
+    
     func start() {
         lastKnownLocation = nil
         manager.requestWhenInUseAuthorization()
@@ -40,7 +37,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
     func stop() {
         manager.stopUpdatingLocation()
     }
-
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         lastKnownLocation = locations.first?.coordinate
     }

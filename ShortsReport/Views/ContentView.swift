@@ -18,10 +18,10 @@ struct ContentView: View {
     var body: some View {
         VStack {
 
-            
-            WeatherCardView(currentWeather: viewModel.currentWeather)
+            WeatherCardView(currentWeather: viewModel.weather)
                 .padding()
                 .padding(.top, 50)
+
             Text("Can I wear shorts right now?").padding()
             
             locationManager.lastKnownLocation.map { _ in
@@ -42,12 +42,21 @@ struct ContentView: View {
 //            }
 //            .padding()
 //
-//            Button("Get Weather") {
-//                if self.locationManager.lastKnownLocation != nil {
-//                    self.viewModel.fetchCurrentWeather(fromLocation: self.locationManager.lastKnownLocation!)
-//                }
-//            }
-//            .padding()
+            
+            HStack {
+                Image("shortFill")
+                Image("shortFill")
+                Image("shortFill")
+                Image("shortFill")
+                Image("shortBlank")
+            }
+            
+            Button("Get Weather") {
+                if self.locationManager.lastKnownLocation != nil {
+                    self.viewModel.fetchCurrentWeather(fromLocation: self.locationManager.lastKnownLocation!)
+                }
+            }
+            .padding()
         }
     }
     

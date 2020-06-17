@@ -12,7 +12,7 @@ import SwiftUI
 
 class ViewModel: ObservableObject {
     
-    @Published var currentWeather: WeatherInfo?
+    @Published var weather: OneCallWeather?
     
     @Published var canWearShorts: ShortsStatus = .analysing {
         didSet {
@@ -32,33 +32,37 @@ class ViewModel: ObservableObject {
     @Published var shortsImage: Image = Image("question")
     
     
-    // Get the current weather conditions once we have a location
     func fetchCurrentWeather(fromLocation coordinates: CLLocationCoordinate2D) {
-        let URL = "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&appid=\(API.key)"
+        
+        let URL = "https://api.openweathermap.org/data/2.5/onecall?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&exclude=minutely&appid=\(API.key)"
+        
         NetworkManager.shared.fetchData(from: URL) { result in
             switch result {
             case .success(let data):
-                print(data)
-                // Decode data
+
                 let decoder = JSONDecoder()
                 decoder.keyDecodingStrategy = .convertFromSnakeCase
                 do {
-                    self.currentWeather = try decoder.decode(WeatherInfo.self, from: data)
-                    print(self.currentWeather!)
+                    self.weather = try decoder.decode(OneCallWeather.self, from: data)
+                    print(self.weather!)
                     self.complicatedAlgorithym()
                 } catch {
-                    print(error.localizedDescription)
+                    print("We couldn't parse the data: \(error.localizedDescription)")
                 }
             case .failure(let error):
                 fatalError("We couldn't get the data: \(error.localizedDescription)")
             }
         }
+        
+
     }
     
     
     func complicatedAlgorithym() {
-        guard currentWeather != nil else { return }
-        let feelsLike = currentWeather!.main.feelsLikeCDouble
+        guard weather != nil else { return }
+        
+        let feelsLike = weather!.current.feelsLike - 273.15
+        
         switch feelsLike {
         case ...5 :
             canWearShorts = .absolutelyNot

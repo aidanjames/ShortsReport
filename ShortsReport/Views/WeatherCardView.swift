@@ -10,25 +10,25 @@ import SwiftUI
 
 struct WeatherCardView: View {
     
-    var currentWeather: WeatherInfo?
+    var currentWeather: OneCallWeather?
     
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
                 HStack {
                     Image(systemName: "mappin.and.ellipse")
-                    Text("\(currentWeather?.name ?? "-")").fontWeight(.black)
+                    Text("-").fontWeight(.black)
                 }
                 HStack {
-                    Text("\(currentWeather?.main.tempCString ?? "-")°").font(.largeTitle).bold()
-                    Text("Feels like: \(currentWeather?.main.feelsLikeCString ?? "-")°").font(.caption)
+                    Text("\((currentWeather?.current.temp ?? 0).kelvinAsCelciusString())°").font(.largeTitle).bold()
+                    Text("Feels like: \((currentWeather?.current.feelsLike ?? 0).kelvinAsCelciusString())°").font(.caption)
                         .foregroundColor(.secondary)
                 }
             }
             Spacer()
             HStack {
                 VStack {
-                    Image("\(currentWeather?.firstWeatherUnwrapped.icon ?? "50d")")
+                    Image("\(currentWeather?.current.firstWeatherUnwrapped.icon ?? "50d")")
                 }
             }
         }
@@ -38,9 +38,9 @@ struct WeatherCardView: View {
     }
 }
 
-struct WeatherCardView_Previews: PreviewProvider {
-    static var previews: some View {
-        WeatherCardView(currentWeather: MockData.previewData())
-            .previewLayout(.sizeThatFits)
-    }
-}
+//struct WeatherCardView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        WeatherCardView(currentWeather: MockData.previewData())
+//            .previewLayout(.sizeThatFits)
+//    }
+//}
