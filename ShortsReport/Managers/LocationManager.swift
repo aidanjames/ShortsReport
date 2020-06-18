@@ -11,13 +11,15 @@ import CoreLocation
 class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
     
     private let manager = CLLocationManager()
+    
+    @Published var lastKnownTown: String = "-"
+
     @Published var lastKnownLocation: CLLocationCoordinate2D? {
         // This will stop updating the location once we have coordinates
         didSet {
             stop()
         }
     }
-    
     
     override init() {
         super.init()
@@ -34,11 +36,47 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
         manager.startUpdatingLocation()
     }
     
+    
     func stop() {
         manager.stopUpdatingLocation()
     }
     
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        lastKnownLocation = locations.first?.coordinate
+        if let firstLocation = locations.first {
+            self.lastKnownLocation = firstLocation.coordinate
+            self.getPlace(for: locations.first!) { placemark in
+                guard let place = placemark else { return }
+                if let town = place.subLocality {
+                    self.lastKnownTown = town
+                } else if let city = place.locality {
+                    self.lastKnownTown = city
+                }
+            }
+        }
+    }
+}
+
+
+extension LocationManager {
+    
+    func getPlace(for location: CLLocation, completion: @escaping (CLPlacemark?) -> Void) {
+        
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(location) { placemarks, error in
+            
+            guard error == nil else {
+                print("*** Error in \(#function): \(error!.localizedDescription)")
+                completion(nil)
+                return
+            }
+            
+            guard let placemark = placemarks?[0] else {
+                print("*** Error in \(#function): placemark is nil")
+                completion(nil)
+                return
+            }
+            completion(placemark)
+        }
     }
 }

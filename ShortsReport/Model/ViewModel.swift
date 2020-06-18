@@ -31,7 +31,6 @@ class ViewModel: ObservableObject {
         
     @Published var shortsImage: Image = Image("question")
     
-    @Published var locationName: String = "-"
     
     
     func fetchCurrentWeather(fromLocation coordinates: CLLocationCoordinate2D) {
@@ -48,30 +47,6 @@ class ViewModel: ObservableObject {
                     self.weather = try decoder.decode(OneCallWeather.self, from: data)
                     print(self.weather!)
                     self.complicatedAlgorithym()
-                    self.fetchCurrentLocationName(fromLocation: coordinates)
-                } catch {
-                    print("We couldn't parse the data: \(error.localizedDescription)")
-                }
-            case .failure(let error):
-                fatalError("We couldn't get the data: \(error.localizedDescription)")
-            }
-        }
-    }
-    
-    
-    func fetchCurrentLocationName(fromLocation coordinates: CLLocationCoordinate2D) {
-        
-        let URL = "https://api.openweathermap.org/data/2.5/weather?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&appid=\(API.key)"
-        
-        NetworkManager.shared.fetchData(from: URL) { result in
-            switch result {
-            case .success(let data):
-
-                let decoder = JSONDecoder()
-                decoder.keyDecodingStrategy = .convertFromSnakeCase
-                do {
-                    let location = try decoder.decode(LocationName.self, from: data)
-                    self.locationName = location.name
                 } catch {
                     print("We couldn't parse the data: \(error.localizedDescription)")
                 }

@@ -18,7 +18,7 @@ struct ContentView: View {
     var body: some View {
         VStack {
 
-            WeatherCardView(currentWeather: viewModel.weather, locationName: viewModel.locationName)
+            WeatherCardView(currentWeather: viewModel.weather, locationName: locationManager.lastKnownTown)
                 .padding()
                 .padding(.top, 50)
 
