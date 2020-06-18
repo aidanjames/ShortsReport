@@ -11,13 +11,14 @@ import SwiftUI
 struct WeatherCardView: View {
     
     var currentWeather: OneCallWeather?
+    var locationName: String
     
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
                 HStack {
                     Image(systemName: "mappin.and.ellipse")
-                    Text("-").fontWeight(.black)
+                    Text("\(locationName)").fontWeight(.black)
                 }
                 HStack {
                     Text("\((currentWeather?.current.temp ?? 0).kelvinAsCelciusString())°").font(.largeTitle).bold()
