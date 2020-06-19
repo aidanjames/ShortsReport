@@ -58,6 +58,24 @@ struct ContentView: View {
             }
             .padding()
         }
+            
+        .onAppear() {
+            self.updateLocationAndWeather()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+            self.updateLocationAndWeather()
+        }
+    }
+    
+    func updateLocationAndWeather() {
+        // Update location
+        self.locationManager.lastKnownLocation = nil
+        self.locationManager.start()
+        // Update weather
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            guard self.locationManager.lastKnownLocation != nil else { return }
+            self.viewModel.fetchCurrentWeather(fromLocation: self.locationManager.lastKnownLocation!)
+        }
     }
     
     
