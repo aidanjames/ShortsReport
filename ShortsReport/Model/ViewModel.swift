@@ -20,7 +20,6 @@ class ViewModel: ObservableObject {
                 shortsImage = Image("question")
                 return
             }
-            
             if canWearShorts == .onlyShortsProfessionals || canWearShorts == .maybe || canWearShorts == .definitely {
                 shortsImage = Image("shorts\(Int.random(in: 1...6))")
             } else {
@@ -28,19 +27,53 @@ class ViewModel: ObservableObject {
             }
         }
     }
-        
+    
     @Published var shortsImage: Image = Image("question")
     
+   
+    // Location variables
+    let locationManager = LocationManager()
+    
+    @Published var currentLocation: CLLocation? {
+        didSet {
+            guard currentLocation != nil else { return }
+            self.fetchCurrentWeather(fromLocation: currentLocation!.coordinate)
+            self.updateTownName()
+        }
+    }
+    
+    @Published var lastKnownTown: String = ""
     
     
-    func fetchCurrentWeather(fromLocation coordinates: CLLocationCoordinate2D) {
+    func updateWeather() {
+        self.currentLocation = nil
+        locationManager.start()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.currentLocation = self.locationManager.currentLocation
+        }
+    }
+    
+    private func updateTownName() {
+        guard currentLocation != nil else { return }
+        self.locationManager.getPlace(for: self.currentLocation!) { placemark in
+            guard let place = placemark else { return }
+            if let town = place.subLocality {
+                self.lastKnownTown = town
+            } else if let city = place.locality {
+                self.lastKnownTown = city
+            }
+        }
+    }
+    
+    
+    private func fetchCurrentWeather(fromLocation coordinates: CLLocationCoordinate2D) {
         
         let URL = "https://api.openweathermap.org/data/2.5/onecall?lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&exclude=minutely&appid=\(API.key)"
         
         NetworkManager.shared.fetchData(from: URL) { result in
             switch result {
             case .success(let data):
-
+                
                 let decoder = JSONDecoder()
                 decoder.keyDecodingStrategy = .convertFromSnakeCase
                 do {
@@ -57,7 +90,7 @@ class ViewModel: ObservableObject {
     }
     
     
-    func complicatedAlgorithym() {
+    private func complicatedAlgorithym() {
         guard weather != nil else { return }
         
         let feelsLike = weather!.current.feelsLike - 273.15
@@ -76,10 +109,11 @@ class ViewModel: ObservableObject {
         }
         
     }
-
-    
     
 }
+
+
+
 
 enum ShortsStatus: String {
     case analysing = "Analysing complicated data"

@@ -10,55 +10,23 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @ObservedObject var locationManager = LocationManager()
     @ObservedObject var viewModel = ViewModel()
     
-    var shortsDescription: String { viewModel.canWearShorts.rawValue }
     
     var body: some View {
         VStack {
-
-            WeatherCardView(currentWeather: viewModel.weather, locationName: locationManager.lastKnownTown)
+            WeatherCardView(currentWeather: viewModel.weather, locationName: viewModel.lastKnownTown)
                 .padding()
                 .padding(.top, 50)
-
             Text("Can I wear shorts right now?").padding()
-            
-            locationManager.lastKnownLocation.map { _ in
-                Text(shortsDescription).font(.largeTitle).bold().padding()
-                    .onAppear {
-                        self.viewModel.fetchCurrentWeather(fromLocation: self.locationManager.lastKnownLocation!)
-                }
-            }
-            
+            Text("\(viewModel.canWearShorts.rawValue)").font(.largeTitle).bold().padding()
             viewModel.shortsImage
                 .resizable()
                 .scaledToFit()
-            
             Spacer()
-            
-//            Button("Update location") {
-//                self.locationManager.start()
-//            }
-//            .padding()
-//
-            
-            HStack {
-                Image("shortFill")
-                Image("shortFill")
-                Image("shortFill")
-                Image("shortFill")
-                Image("shortBlank")
-            }
-            
-            Button("Get Weather") {
-                if self.locationManager.lastKnownLocation != nil {
-                    self.viewModel.fetchCurrentWeather(fromLocation: self.locationManager.lastKnownLocation!)
-                }
-            }
-            .padding()
+            Button("Get Weather") { self.viewModel.updateWeather() }
+                .padding()
         }
-            
         .onAppear() {
             self.updateLocationAndWeather()
         }
@@ -68,14 +36,7 @@ struct ContentView: View {
     }
     
     func updateLocationAndWeather() {
-        // Update location
-        self.locationManager.lastKnownLocation = nil
-        self.locationManager.start()
-        // Update weather
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            guard self.locationManager.lastKnownLocation != nil else { return }
-            self.viewModel.fetchCurrentWeather(fromLocation: self.locationManager.lastKnownLocation!)
-        }
+        viewModel.updateWeather()
     }
     
     
