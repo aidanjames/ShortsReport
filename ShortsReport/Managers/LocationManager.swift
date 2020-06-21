@@ -11,23 +11,19 @@ import CoreLocation
 class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
     
     private let manager = CLLocationManager()
-
-    var currentLocation: CLLocation? {
-        didSet {
-            stop()
-        }
-    }
+    
+    var completion: ((CLLocation) -> Void)? = nil
     
     
     override init() {
         super.init()
         manager.delegate = self
         manager.desiredAccuracy = kCLLocationAccuracyKilometer	      
+        
     }
     
     
     func start() {
-        currentLocation = nil
         manager.requestWhenInUseAuthorization()
         manager.startUpdatingLocation()
     }
@@ -40,7 +36,10 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let firstLocation = locations.first {
-            self.currentLocation = firstLocation
+            if let completion = completion {
+                completion(firstLocation)
+                self.stop()
+            }
         }
     }
 

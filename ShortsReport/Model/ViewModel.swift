@@ -30,7 +30,9 @@ class ViewModel: ObservableObject {
     
     @Published var shortsImage: Image = Image("question")
     
-   
+    @Published var showingLoadingAnimation = true
+    
+    
     // Location variables
     let locationManager = LocationManager()
     
@@ -46,10 +48,14 @@ class ViewModel: ObservableObject {
     
     
     func updateWeather() {
+        self.showingLoadingAnimation = true
         self.currentLocation = nil
         locationManager.start()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.currentLocation = self.locationManager.currentLocation
+        
+        locationManager.completion = { location in
+            DispatchQueue.main.async {
+                self.currentLocation = location
+            }
         }
     }
     
@@ -80,11 +86,16 @@ class ViewModel: ObservableObject {
                     self.weather = try decoder.decode(OneCallWeather.self, from: data)
                     print(self.weather!)
                     self.complicatedAlgorithym()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        withAnimation { self.showingLoadingAnimation = false }
+                    }
                 } catch {
                     print("We couldn't parse the data: \(error.localizedDescription)")
+                    // Add an alert bool to present an error to the user
                 }
             case .failure(let error):
-                fatalError("We couldn't get the data: \(error.localizedDescription)")
+                print("We couldn't get the data: \(error.localizedDescription)")
+                // Add an alert bool to present an error to the user
             }
         }
     }
@@ -98,11 +109,11 @@ class ViewModel: ObservableObject {
         switch feelsLike {
         case ...5 :
             canWearShorts = .absolutelyNot
-        case 5...10:
+        case 5...13:
             canWearShorts = .onlyShortsProfessionals
-        case 10...15:
+        case 13...16:
             canWearShorts = .maybe
-        case 10...:
+        case 16...:
             canWearShorts = .definitely
         default:
             canWearShorts = .analysing

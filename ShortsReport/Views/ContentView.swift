@@ -12,17 +12,29 @@ struct ContentView: View {
     
     @ObservedObject var viewModel = ViewModel()
     
-    
     var body: some View {
         VStack {
-            WeatherCardView(currentWeather: viewModel.weather, locationName: viewModel.lastKnownTown)
-                .padding()
-                .padding(.top, 50)
-            Text("Can I wear shorts right now?").padding()
-            Text("\(viewModel.canWearShorts.rawValue)").font(.largeTitle).bold().padding()
-            viewModel.shortsImage
-                .resizable()
-                .scaledToFit()
+
+            
+            if viewModel.showingLoadingAnimation {
+                LottieView(filename: "loading")
+            } else {
+                
+                WeatherCardView(currentWeather: viewModel.weather, locationName: viewModel.lastKnownTown)
+                    .padding()
+                    .padding(.top, 50)
+                Text("Can I wear shorts right now?").padding()
+                Text("\(viewModel.canWearShorts.rawValue)").font(.largeTitle).bold().padding()
+                
+                viewModel.shortsImage
+                    .resizable()
+                    .scaledToFit()
+                
+                
+                
+            }
+            
+            
             Spacer()
             Button("Get Weather") { self.viewModel.updateWeather() }
                 .padding()
