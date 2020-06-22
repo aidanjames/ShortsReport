@@ -13,42 +13,44 @@ struct ContentView: View {
     @ObservedObject var viewModel = ViewModel()
     
     var body: some View {
-        VStack {
+        NavigationView {
+            VStack {
+                if viewModel.showingLoadingAnimation {
+                    LottieView(filename: "loading")
+                } else {
+                    
+                    WeatherCardView(currentWeather: viewModel.weather, locationName: viewModel.lastKnownTown)
+                        .padding()
+                    viewModel.shortsImage
+                        .resizable()
+                        .scaledToFit()
+                    HStack(spacing: 0) {
+                        Text("Shorts status: ")
+                        Text("\(viewModel.canWearShorts.rawValue)").bold()
+                    }
 
-            
-            if viewModel.showingLoadingAnimation {
-                LottieView(filename: "loading")
-            } else {
+                }
                 
-                WeatherCardView(currentWeather: viewModel.weather, locationName: viewModel.lastKnownTown)
+                Spacer()
+                Button("Get Weather") { self.viewModel.updateWeather() }
                     .padding()
-                    .padding(.top, 50)
-                Text("Can I wear shorts right now?").padding()
-                Text("\(viewModel.canWearShorts.rawValue)").font(.largeTitle).bold().padding()
-                
-                viewModel.shortsImage
-                    .resizable()
-                    .scaledToFit()
-                
-                
-                
             }
-            
-            
-            Spacer()
-            Button("Get Weather") { self.viewModel.updateWeather() }
-                .padding()
+            .navigationBarTitle("Shorts report")
+            .onAppear() {
+                self.viewModel.updateWeather()
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+                // Only check the latest weather if the app has was backgrounded longer than 10 mins ago
+                if let date = UserDefaults.standard.object(forKey: DefaultsKeys.date) as? Date {
+                    guard date.minutesBetweenDates() > 10 else { return }
+                    self.viewModel.updateWeather()
+                }
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
+                // Save time the app goes into background so we can use this to decide if we need to update weather on returning to foreground
+                UserDefaults.standard.set(Date(), forKey: DefaultsKeys.date)
+            }
         }
-        .onAppear() {
-            self.updateLocationAndWeather()
-        }
-        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-            self.updateLocationAndWeather()
-        }
-    }
-    
-    func updateLocationAndWeather() {
-        viewModel.updateWeather()
     }
     
     

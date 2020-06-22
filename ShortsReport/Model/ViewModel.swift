@@ -84,7 +84,7 @@ class ViewModel: ObservableObject {
                 decoder.keyDecodingStrategy = .convertFromSnakeCase
                 do {
                     self.weather = try decoder.decode(OneCallWeather.self, from: data)
-                    print(self.weather!)
+//                    print(self.weather!)
                     self.complicatedAlgorithym()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         withAnimation { self.showingLoadingAnimation = false }
@@ -128,9 +128,9 @@ class ViewModel: ObservableObject {
 
 enum ShortsStatus: String {
     case analysing = "Analysing complicated data"
-    case definitely = "Definitely!"
-    case maybe = "Yes-ish"
-    case onlyShortsProfessionals = "Only for shorts professionals"
+    case definitely = "Shorts ON!"
+    case maybe = "Can wear"
+    case onlyShortsProfessionals = "Professionals only"
     case absolutelyNot = "No fucking way"
 }
 

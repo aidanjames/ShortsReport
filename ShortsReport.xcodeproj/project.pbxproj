@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D14AB5824A14D4600235BCB /* Date+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D14AB5724A14D4600235BCB /* Date+Ext.swift */; };
 		3D17723D249019FC00D749E6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D17723C249019FC00D749E6 /* AppDelegate.swift */; };
 		3D17723F249019FC00D749E6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D17723E249019FC00D749E6 /* SceneDelegate.swift */; };
 		3D177241249019FC00D749E6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D177240249019FC00D749E6 /* ContentView.swift */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3D14AB5724A14D4600235BCB /* Date+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ext.swift"; sourceTree = "<group>"; };
 		3D177239249019FC00D749E6 /* ShortsReport.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShortsReport.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D17723C249019FC00D749E6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3D17723E249019FC00D749E6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				3D7B78E62499539D004E5EC4 /* Color+Ext.swift */,
 				3D308455249AB89000919EA3 /* Double+Ext.swift */,
 				3DD4B385249FEC9A00DF4424 /* LottieView.swift */,
+				3D14AB5724A14D4600235BCB /* Date+Ext.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -219,6 +222,7 @@
 			files = (
 				3D17723D249019FC00D749E6 /* AppDelegate.swift in Sources */,
 				3D17723F249019FC00D749E6 /* SceneDelegate.swift in Sources */,
+				3D14AB5824A14D4600235BCB /* Date+Ext.swift in Sources */,
 				3D19ECAC2496AD2A007AC30C /* WeatherInfo.swift in Sources */,
 				3D53D441249172B400B8BB9B /* LocationManager.swift in Sources */,
 				3D308456249AB89000919EA3 /* Double+Ext.swift in Sources */,
