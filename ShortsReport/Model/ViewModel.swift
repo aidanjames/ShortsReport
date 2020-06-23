@@ -29,8 +29,9 @@ class ViewModel: ObservableObject {
     }
     
     @Published var shortsImage: Image = Image("question")
-    
     @Published var showingLoadingAnimation = true
+    @Published var showingErrorAlert = false
+    @Published var errorAlertMessage = ""
     
     
     // Location variables
@@ -85,6 +86,7 @@ class ViewModel: ObservableObject {
                 do {
                     self.weather = try decoder.decode(OneCallWeather.self, from: data)
 //                    print(self.weather!)
+                    UserDefaults.standard.set(Date(), forKey: DefaultsKeys.date)
                     self.complicatedAlgorithym()
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         withAnimation { self.showingLoadingAnimation = false }
@@ -92,10 +94,14 @@ class ViewModel: ObservableObject {
                 } catch {
                     print("We couldn't parse the data: \(error.localizedDescription)")
                     // Add an alert bool to present an error to the user
+                    self.showingErrorAlert = true
+                    self.errorAlertMessage = "Could not parse data: \(error.localizedDescription)"
                 }
             case .failure(let error):
                 print("We couldn't get the data: \(error.localizedDescription)")
                 // Add an alert bool to present an error to the user
+                self.showingErrorAlert = true
+                self.errorAlertMessage = "Could not get data: \(error.localizedDescription)"
             }
         }
     }

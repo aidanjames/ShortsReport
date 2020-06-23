@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @ObservedObject var viewModel = ViewModel()
+    @ObservedObject var viewModel: ViewModel
     
     var body: some View {
         NavigationView {
@@ -39,16 +39,15 @@ struct ContentView: View {
             .onAppear() {
                 self.viewModel.updateWeather()
             }
+            .alert(isPresented: $viewModel.showingErrorAlert) {
+                Alert(title: Text("Oops!"), message: Text(self.viewModel.errorAlertMessage), dismissButton: .cancel(Text("OK")))
+            }
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
-                // Only check the latest weather if the app has was backgrounded longer than 10 mins ago
+                // Only check the latest weather it's not been updatd in last 10 mins
                 if let date = UserDefaults.standard.object(forKey: DefaultsKeys.date) as? Date {
                     guard date.minutesBetweenDates() > 10 else { return }
                     self.viewModel.updateWeather()
                 }
-            }
-            .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
-                // Save time the app goes into background so we can use this to decide if we need to update weather on returning to foreground
-                UserDefaults.standard.set(Date(), forKey: DefaultsKeys.date)
             }
         }
     }
@@ -58,6 +57,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(viewModel: ViewModel())
     }
 }
